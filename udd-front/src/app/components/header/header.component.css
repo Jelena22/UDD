@@ -3,3 +3,29 @@
     display: flex;
     flex-wrap: wrap;
   }
+
+  .button {
+    position: fixed; /* Postavlja element fiksno na ekranu */
+    top: 15px; /* Pomeranje od vrha stranice */
+    right: 80px; /* Pomeranje od desne ivice stranice */
+    padding: 10px 20px; /* Dodavanje prostora oko teksta dugmeta */
+    /*background-color: #007bff; /* Boja pozadine dugmeta */
+    color: #fff; /* Boja teksta dugmeta */
+    border: none; /* Bez ivice dugmeta */
+    border-radius: 5px; /* Zaobljeni uglovi dugmeta */
+    cursor: pointer; /* Kursor pri hoveru */
+    z-index: 1000; /* Opciono: Podesi z-index da bude iznad ostalog sadržaja */
+}
+
+.button1 {
+  position: fixed; /* Postavlja element fiksno na ekranu */
+  top: 15px; /* Pomeranje od vrha stranice */
+  right: 20px; /* Pomeranje od desne ivice stranice */
+  padding: 10px 20px; /* Dodavanje prostora oko teksta dugmeta */
+  /*background-color: #007bff; /* Boja pozadine dugmeta */
+  color: #fff; /* Boja teksta dugmeta */
+  border: none; /* Bez ivice dugmeta */
+  border-radius: 5px; /* Zaobljeni uglovi dugmeta */
+  cursor: pointer; /* Kursor pri hoveru */
+  z-index: 1000; /* Opciono: Podesi z-index da bude iznad ostalog sadržaja */
+}

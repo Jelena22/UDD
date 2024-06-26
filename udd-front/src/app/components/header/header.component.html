@@ -1,15 +1,17 @@
-<mat-toolbar class="app-navbar" color="warn">
+<div>
+<mat-toolbar class="app-navbar" color="primary">
     <div>
         <div fxLayout="row">
-          <button mat-button mat-ripple routerLink="/register-user">
+          <button class="button" *ngIf="!isLoggedIn" mat-button mat-ripple routerLink="/register-user">
             <span>Register</span>
           </button>
-          <!--<button *ngIf="!isLoggedIn" mat-button mat-ripple routerLink="/login">
+          <button  class="button1" *ngIf="!isLoggedIn" mat-button mat-ripple routerLink="/login">
             <span>Login</span>
-          </button>-->
-          <!--<button *ngIf="isLoggedIn" mat-button mat-ripple (click)="logout()">
+          </button>
+          <button  class="button1" *ngIf="isLoggedIn" mat-button mat-ripple (click)="logout()">
             <span>Logout</span>
-          </button>-->
+          </button>
         </div>
     </div>
  </mat-toolbar>
+</div>

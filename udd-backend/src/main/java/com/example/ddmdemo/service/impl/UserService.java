@@ -1,7 +1,8 @@
 package com.example.ddmdemo.service.impl;
 
+import com.example.ddmdemo.dto.LoginDTO;
 import com.example.ddmdemo.dto.UserRegistrationDTO;
-import com.example.ddmdemo.model.Role;
+import com.example.ddmdemo.model.Authority;
 import com.example.ddmdemo.model.User;
 import com.example.ddmdemo.respository.RoleRepository;
 import com.example.ddmdemo.respository.UserRepository;
@@ -41,22 +42,38 @@ public class UserService {
         return BCrypt.hashpw(password, BCrypt.gensalt(12));
     }
 
+    public boolean verifyHash(String password, String hash) {
+        return BCrypt.checkpw(password, hash);
+    }
+
     public User registerUser(UserRegistrationDTO userRegistrationDTO) {
         User registeredUser = new User();
         registeredUser.setEmail(userRegistrationDTO.getEmail());
         byte[] salt = generateSalt();
         String encodedSalt = Base64.getEncoder().encodeToString(salt);
-        //registeredUser.setSalt(encodedSalt);
+        registeredUser.setSalt(encodedSalt);
         String passwordWithSalt = generatePasswordWithSalt(userRegistrationDTO.getPassword(), encodedSalt);
         String securePassword = hashPassword(passwordWithSalt);
         registeredUser.setPassword(securePassword);
         registeredUser.setName(userRegistrationDTO.getName());
         registeredUser.setSurname(userRegistrationDTO.getSurname());
-        Role role = roleRepository.findByName("ROLE_REGULAR_USER");
+        Authority role = roleRepository.findByName("ROLE_REGULAR_USER");
         registeredUser.setRole(role);
         userRepository.save(registeredUser);
         //ConfirmationToken confirmationToken = confirmationTokenService.saveConfirmationToken(registeredUser);
         return registeredUser;
 
+    }
+
+    public User login(LoginDTO authenticationRequest) {
+        System.out.println("Usao u login service");
+        User user = findByEmail(authenticationRequest.getEmail());
+        System.out.println(user);
+        if (user != null)
+            if (verifyHash(generatePasswordWithSalt(authenticationRequest.getPassword(), user.getSalt()),
+                    user.getPassword()))
+                return user;
+
+        return null;
     }
 }
