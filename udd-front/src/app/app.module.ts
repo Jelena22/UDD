@@ -24,6 +24,7 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatRadioModule} from '@angular/material/radio';
 import { HttpClientModule } from '@angular/common/http';
+import { SearchLawComponent } from './components/search-law/search-law.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { HttpClientModule } from '@angular/common/http';
     AppComponent,
     RegisterUserComponent,
     LoginUserComponent,
-    HeaderComponent
+    HeaderComponent,
+    SearchLawComponent
   ],
   imports: [
     BrowserModule,

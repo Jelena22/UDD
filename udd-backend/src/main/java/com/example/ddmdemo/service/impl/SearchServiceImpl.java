@@ -2,12 +2,18 @@ package com.example.ddmdemo.service.impl;
 
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
+//import com.example.ddmdemo.dto.LawIndexResultsDTO;
+import com.example.ddmdemo.dto.LawIndexResultsDTO;
 import com.example.ddmdemo.exceptionhandling.exception.MalformedQueryException;
 import com.example.ddmdemo.indexmodel.DummyIndex;
+//import com.example.ddmdemo.indexmodel.LawIndex;
+import com.example.ddmdemo.indexmodel.LawIndex;
+import com.example.ddmdemo.service.interfaces.FileService;
 import com.example.ddmdemo.service.interfaces.SearchService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.common.unit.Fuzziness;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
@@ -15,13 +21,22 @@ import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHitSupport;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.HighlightQuery;
+import org.springframework.data.elasticsearch.core.query.highlight.Highlight;
+import org.springframework.data.elasticsearch.core.query.highlight.HighlightField;
+import org.springframework.data.elasticsearch.core.query.highlight.HighlightFieldParameters;
 import org.springframework.stereotype.Service;
+
+import static com.example.ddmdemo.dto.LawIndexResultsDTO.toLawIndexResultsDTO;
+
+//import static com.example.ddmdemo.dto.LawIndexResultsDTO.toLawIndexResultsDTO;
 
 @Service
 @RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
 
     private final ElasticsearchOperations elasticsearchTemplate;
+    private final FileService fileService;
 
     @Override
     public Page<DummyIndex> simpleSearch(List<String> keywords, Pageable pageable) {
@@ -48,13 +63,15 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private Query buildSimpleSearchQuery(List<String> tokens) {
+        System.out.println(tokens);
         return BoolQuery.of(q -> q.must(mb -> mb.bool(b -> {
             tokens.forEach(token -> {
-                b.should(sb -> sb.match(
-                    m -> m.field("title").fuzziness(Fuzziness.ONE.asString()).query(token)));
-                b.should(sb -> sb.match(m -> m.field("content_sr").query(token)));
-                b.should(sb -> sb.match(m -> m.field("content_en").query(token)));
+                //b.should(sb -> sb.match(
+                  //  m -> m.field("title").fuzziness(Fuzziness.ONE.asString()).query(token)));
+                b.should(sb -> sb.match(m -> m.field("content").query(token)));
+                //b.should(sb -> sb.match(m -> m.field("content_en").query(token)));
             });
+            System.out.println(b);
             return b;
         })))._toQuery();
     }
@@ -97,4 +114,41 @@ public class SearchServiceImpl implements SearchService {
 
         return (Page<DummyIndex>) SearchHitSupport.unwrapSearchHits(searchHitsPaged);
     }
+
+    @Override
+    public Page<LawIndexResultsDTO> lawSearch(final List<String> keywords, final Pageable pageable) {
+        System.out.println("Usao u law search service");
+        System.out.println(keywords);
+        var searchQueryBuilder =
+                new NativeQueryBuilder().withQuery(buildSimpleSearchQuery(keywords))
+                        .withHighlightQuery(new HighlightQuery(
+                                new Highlight(List.of(
+                                        new HighlightField("content", getHighlightFieldParameters())
+                                )),
+                                Object.class
+                        ))
+                        .withPageable(pageable);
+        System.out.println(searchQueryBuilder.getQuery());
+
+        return runLawQuery(searchQueryBuilder.build());
+    }
+
+    @NotNull
+    private HighlightFieldParameters getHighlightFieldParameters() {
+        return HighlightFieldParameters.builder()
+                .withFragmentSize(200)
+                .withNumberOfFragments(1)
+                .build();
+    }
+
+    private Page<LawIndexResultsDTO> runLawQuery(NativeQuery searchQuery) {
+        System.out.println(searchQuery.getQuery());
+        var searchHits = elasticsearchTemplate.search(searchQuery, LawIndex.class,
+                IndexCoordinates.of("law_index"));
+        System.out.println(searchHits.getSearchHits());
+        var searchHitsPaged = SearchHitSupport.searchPageFor(searchHits, searchQuery.getPageable());
+        System.out.println(searchHitsPaged);
+        return toLawIndexResultsDTO(searchHitsPaged, fileService);
+    }
+
 }

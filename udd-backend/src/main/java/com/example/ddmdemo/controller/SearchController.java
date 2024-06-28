@@ -1,7 +1,9 @@
 package com.example.ddmdemo.controller;
 
+import com.example.ddmdemo.dto.LawIndexResultsDTO;
 import com.example.ddmdemo.dto.SearchQueryDTO;
 import com.example.ddmdemo.indexmodel.DummyIndex;
+import com.example.ddmdemo.indexmodel.LawIndex;
 import com.example.ddmdemo.service.interfaces.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,5 +30,13 @@ public class SearchController {
     public Page<DummyIndex> advancedSearch(@RequestBody SearchQueryDTO advancedSearchQuery,
                                            Pageable pageable) {
         return searchService.advancedSearch(advancedSearchQuery.keywords(), pageable);
+    }
+
+    @PostMapping("/law")
+    public Page<LawIndexResultsDTO> simpleLawSearch(@RequestBody SearchQueryDTO simpleSearchQuery, Pageable pageable) {
+        System.out.println("Usao u law search controller");
+        System.out.println(simpleSearchQuery);
+        System.out.println(pageable);
+        return searchService.lawSearch(simpleSearchQuery.keywords(), pageable);
     }
 }

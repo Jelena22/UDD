@@ -11,5 +11,5 @@ public interface FileService {
 
     void delete(String serverFilename);
 
-    GetObjectResponse loadAsResource(String serverFilename);
+    String loadAsResource(String serverFilename);
 }

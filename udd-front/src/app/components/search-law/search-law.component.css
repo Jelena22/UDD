@@ -1,0 +1,45 @@
+.file-upload-container {
+    text-align: left;
+    margin: 20px;
+  }
+
+  input[type=file] {
+    background-color: #6535c4; /* Ljubičasta boja za pozadinu */
+    color: white; /* Beli tekst */
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+
+  input[type=file]:hover {
+    background-color: #8b3eb7; /* Tamnija nijansa ljubičaste boje na hover */
+  }
+  
+  input[type=file]:active {
+    background-color: #520079; /* Još tamnija nijansa ljubičaste boje na klik */
+  }
+
+  button.custom-upload {
+    background-color: #6535c4; /* Ljubičasta boja za pozadinu */
+    color: white; /* Beli tekst */
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: inline-block;
+    margin-left: 10px; /* Pomeranje u desno */
+  }
+  
+  button.custom-upload:hover {
+    background-color: #8b3eb7; /* Tamnija nijansa ljubičaste boje na hover */
+  }
+  
+  button.custom-upload:active {
+    background-color: #520079; /* Još tamnija nijansa ljubičaste boje na klik */
+  }
