@@ -1,0 +1,11 @@
+<div class="file-upload-container">
+    <h2>File Upload</h2>
+    <input type="file" (change)="onFileSelected($event)" multiple />
+    <button class="custom-upload" (click)="onUpload()">Upload</button>
+    <div *ngIf="files.length > 0">
+        <h3>Selected Files:</h3>
+        <ul>
+          <li *ngFor="let file of files">{{ file.name }}</li>
+        </ul>
+      </div>
+  </div>

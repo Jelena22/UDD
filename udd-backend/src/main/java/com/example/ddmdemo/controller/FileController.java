@@ -24,16 +24,24 @@ public class FileController {
 
     private final FileService fileService;
 
+//    @GetMapping("/{filename}")
+//    @ResponseBody
+//    public ResponseEntity<Resource> serveFile(@PathVariable String filename) throws IOException {
+//        log.info("STATISTIC-LOG serveFile -> " + filename);
+//
+//        var minioResponse = fileService.loadAsResource(filename);
+//        return ResponseEntity.ok()
+//            .header(HttpHeaders.CONTENT_DISPOSITION,
+//                minioResponse.headers().get("Content-Disposition"))
+//            .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(Path.of(filename)))
+//            .body(new InputStreamResource(minioResponse));
+//    }
+
     @GetMapping("/{filename}")
     @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) throws IOException {
+    public String serveFile(@PathVariable String filename) throws IOException {
         log.info("STATISTIC-LOG serveFile -> " + filename);
 
-        var minioResponse = fileService.loadAsResource(filename);
-        return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION,
-                minioResponse.headers().get("Content-Disposition"))
-            .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(Path.of(filename)))
-            .body(new InputStreamResource(minioResponse));
+        return fileService.loadAsResource(filename);
     }
 }

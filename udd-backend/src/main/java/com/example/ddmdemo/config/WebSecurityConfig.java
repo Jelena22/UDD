@@ -53,6 +53,8 @@ public class WebSecurityConfig{
 				.authorizeRequests(authorize -> authorize
 						.requestMatchers("/auth/**").permitAll()
 						.requestMatchers("/api/auth/**").permitAll()
+						.requestMatchers("/api/index/**").permitAll()
+						.requestMatchers("/api/search/**").permitAll()
 						.requestMatchers("/verify/**").permitAll()
 						.anyRequest().authenticated()
 				)

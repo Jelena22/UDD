@@ -46,6 +46,7 @@ public class FileServiceMinioImpl implements FileService {
                 .build();
             minioClient.putObject(args);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new StorageException("Error while storing file in Minio.");
         }
 
@@ -66,24 +67,19 @@ public class FileServiceMinioImpl implements FileService {
     }
 
     @Override
-    public GetObjectResponse loadAsResource(String serverFilename) {
+    public String loadAsResource(final String serverFilename) {
         try {
             // Get signed URL
             var argsDownload = GetPresignedObjectUrlArgs.builder()
-                .method(Method.GET)
-                .bucket(bucketName)
-                .object(serverFilename)
-                .expiry(60 * 5) // in seconds
-                .build();
+                    .method(Method.GET)
+                    .bucket(bucketName)
+                    .object(serverFilename)
+                    .expiry(60 * 5) // in seconds
+                    .build();
             var downloadUrl = minioClient.getPresignedObjectUrl(argsDownload);
             System.out.println(downloadUrl);
 
-            // Get object response
-            var args = GetObjectArgs.builder()
-                .bucket(bucketName)
-                .object(serverFilename)
-                .build();
-            return minioClient.getObject(args);
+            return downloadUrl;
         } catch (Exception e) {
             throw new NotFoundException("Document " + serverFilename + " does not exist.");
         }
