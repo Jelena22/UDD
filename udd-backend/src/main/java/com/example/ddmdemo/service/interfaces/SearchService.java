@@ -1,7 +1,9 @@
 package com.example.ddmdemo.service.interfaces;
 
 //import com.example.ddmdemo.dto.LawIndexResultsDTO;
+import com.example.ddmdemo.dto.ContractIndexResultsDTO;
 import com.example.ddmdemo.dto.LawIndexResultsDTO;
+import com.example.ddmdemo.dto.SearchQueryContractByNameAndSurnameDTO;
 import com.example.ddmdemo.indexmodel.DummyIndex;
 import java.util.List;
 
@@ -18,4 +20,9 @@ public interface SearchService {
     Page<DummyIndex> advancedSearch(List<String> expression, Pageable pageable);
 
     Page<LawIndexResultsDTO> lawSearch(final List<String> keywords, final Pageable pageable);
+
+    Page<ContractIndexResultsDTO> contractSearchByNameAndSurname(final List<String> keywords, final Pageable pageable);
+    Page<ContractIndexResultsDTO> contractSearchByGovernmentNameAndLevel(final List<String> keywords, final Pageable pageable);
+
+    Page<ContractIndexResultsDTO> contractSearchByContent(final List<String> keywords, final Pageable pageable);
 }

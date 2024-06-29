@@ -36,11 +36,16 @@ export interface SearchResult {
 export class SearchService {
   apiHost: string = 'http://localhost:8080/api/search/';
   url = this.apiHost + 'law';
+  url1 = this.apiHost + 'contract/by-content';
   headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   constructor(private http: HttpClient) { }
 
   search(query: SearchQueryDTO): Observable<SearchResult> {
     return this.http.post<SearchResult>(`${this.url}`, query);
+  }
+
+  searchContractByContent(query: SearchQueryDTO): Observable<SearchResult> {
+    return this.http.post<SearchResult>(`${this.url1}`, query);
   }
 }
