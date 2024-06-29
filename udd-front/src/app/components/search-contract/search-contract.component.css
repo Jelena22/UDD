@@ -1,0 +1,123 @@
+.file-upload-container {
+    text-align: left;
+    margin: 20px;
+  }
+
+  .file-upload-container h2 {
+    color: #5e35b1;
+  }
+
+  input[type=file] {
+    background-color: #7e57c2; /* Ljubičasta boja za pozadinu */
+    color: white; /* Beli tekst */
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+
+  input[type=file]:hover {
+    background-color: #5e35b1; /* Tamnija nijansa ljubičaste boje na hover */
+  }
+  
+  input[type=file]:active {
+    background-color: #520079; /* Još tamnija nijansa ljubičaste boje na klik */
+  }
+
+  button.custom-upload {
+    background-color: #7e57c2; /* Ljubičasta boja za pozadinu */
+    color: white; /* Beli tekst */
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: inline-block;
+    margin-left: 10px; /* Pomeranje u desno */
+  }
+  
+  button.custom-upload:hover {
+    background-color: #5e35b1; /* Tamnija nijansa ljubičaste boje na hover */
+  }
+  
+  button.custom-upload:active {
+    background-color: #4527a0; /* Još tamnija nijansa ljubičaste boje na klik */
+  }
+
+  .search-container {
+    margin: 20px;
+  }
+  
+  .search-container h2 {
+    color: #5e35b1;
+  }
+  
+  .search-container input {
+    padding: 12px;
+    width: 315px;
+    margin-right: 10px;
+    border-radius: 5px;
+    display: inline-block;
+  }
+  
+  .search-container button {
+    padding: 12px 20px;
+    background-color: #7e57c2;
+    font-size: 16px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .search-container button:hover {
+    background-color: #5e35b1;
+  }
+  
+  .search-container button:active {
+    background-color: #4527a0;
+  }
+  
+  .search-container ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .search-container li {
+    margin-bottom: 20px;
+  }
+  
+  .search-container li h4 {
+    margin: 0;
+    color: #3f51b5;
+  }
+  
+  .search-container li p {
+    background-color: #f3e5f5;
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
+  .search-container li a {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #6535c4;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+  
+  .search-container li a:hover {
+    background-color: #5e35b1;
+  }
+  
+  .search-container li a:active {
+    background-color: #4527a0;
+  }

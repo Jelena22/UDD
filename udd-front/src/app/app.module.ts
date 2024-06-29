@@ -25,6 +25,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatRadioModule} from '@angular/material/radio';
 import { HttpClientModule } from '@angular/common/http';
 import { SearchLawComponent } from './components/search-law/search-law.component';
+import { SearchContractComponent } from './components/search-contract/search-contract.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { SearchLawComponent } from './components/search-law/search-law.component
     RegisterUserComponent,
     LoginUserComponent,
     HeaderComponent,
-    SearchLawComponent
+    SearchLawComponent,
+    SearchContractComponent
   ],
   imports: [
     BrowserModule,

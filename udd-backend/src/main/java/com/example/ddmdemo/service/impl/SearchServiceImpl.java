@@ -3,8 +3,11 @@ package com.example.ddmdemo.service.impl;
 import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 //import com.example.ddmdemo.dto.LawIndexResultsDTO;
+import com.example.ddmdemo.dto.ContractIndexResultsDTO;
 import com.example.ddmdemo.dto.LawIndexResultsDTO;
+import com.example.ddmdemo.dto.SearchQueryContractByNameAndSurnameDTO;
 import com.example.ddmdemo.exceptionhandling.exception.MalformedQueryException;
+import com.example.ddmdemo.indexmodel.ContractIndex;
 import com.example.ddmdemo.indexmodel.DummyIndex;
 //import com.example.ddmdemo.indexmodel.LawIndex;
 import com.example.ddmdemo.indexmodel.LawIndex;
@@ -13,11 +16,15 @@ import com.example.ddmdemo.service.interfaces.SearchService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.common.unit.Fuzziness;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
+import org.springframework.data.elasticsearch.client.erhlc.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHitSupport;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
@@ -27,6 +34,7 @@ import org.springframework.data.elasticsearch.core.query.highlight.HighlightFiel
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightFieldParameters;
 import org.springframework.stereotype.Service;
 
+import static com.example.ddmdemo.dto.ContractIndexResultsDTO.toContractIndexResultsDTO;
 import static com.example.ddmdemo.dto.LawIndexResultsDTO.toLawIndexResultsDTO;
 
 //import static com.example.ddmdemo.dto.LawIndexResultsDTO.toLawIndexResultsDTO;
@@ -68,7 +76,7 @@ public class SearchServiceImpl implements SearchService {
             tokens.forEach(token -> {
                 //b.should(sb -> sb.match(
                   //  m -> m.field("title").fuzziness(Fuzziness.ONE.asString()).query(token)));
-                b.should(sb -> sb.match(m -> m.field("content").query(token)));
+                b.should(sb -> sb.matchPhrase(m -> m.field("content").query(token)));
                 //b.should(sb -> sb.match(m -> m.field("content_en").query(token)));
             });
             System.out.println(b);
@@ -149,6 +157,122 @@ public class SearchServiceImpl implements SearchService {
         var searchHitsPaged = SearchHitSupport.searchPageFor(searchHits, searchQuery.getPageable());
         System.out.println(searchHitsPaged);
         return toLawIndexResultsDTO(searchHitsPaged, fileService);
+    }
+
+    private Query buildNameAndSurnameQuery(List<String> tokens) {
+        System.out.println(tokens);
+        BoolQuery boolQuery = BoolQuery.of(b -> {
+            tokens.forEach(token -> {
+                // Match phrase query for name and surname
+                b.should(m -> m.matchPhrase(mp -> mp.field("name").query(token)));
+                b.should(m -> m.matchPhrase(mp -> mp.field("surname").query(token)));
+                b.should(m -> m.matchPhrase(mp -> mp.field("content").query(token)));
+            });
+            return b;
+        });
+
+        return new Query.Builder().bool(boolQuery).build();
+//        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+//
+//        if (tokens.size() > 0) {
+//            boolQuery.should(QueryBuilders.matchPhraseQuery("name", tokens.get(0)));
+//        }
+//        if (tokens.size() > 1) {
+//            boolQuery.should(QueryBuilders.matchPhraseQuery("surname", tokens.get(1)));
+//        } else if (tokens.size() == 1) {
+//            boolQuery.should(QueryBuilders.matchPhraseQuery("surname", tokens.get(0)));
+//        }
+
+//        return BoolQuery.of(q -> q.should(s -> {
+//            if (tokens.size() > 0) {
+//                // Match phrase query for name and surname
+//                if (tokens.size() > 0) {
+//                    s.matchPhrase(m -> m.field("name").query(tokens.get(0)));
+//                }
+//                if (tokens.size() > 1) {
+//                    s.matchPhrase(m -> m.field("surname").query(tokens.get(1)));
+//                }
+//                if(tokens.size() == 1){
+//                    s.matchPhrase(m -> m.field("surname").query(tokens.get(0)));
+//                }
+//            }
+//            return s;
+//        }))._toQuery();
+    }
+
+    @Override
+    public Page<ContractIndexResultsDTO> contractSearchByNameAndSurname(final List<String> keywords, final Pageable pageable) {
+        System.out.println(keywords);
+        var searchQueryBuilder =
+                new NativeQueryBuilder().withQuery(buildNameAndSurnameQuery(keywords))
+                        .withHighlightQuery(new HighlightQuery(
+                                new Highlight(List.of(
+                                        new HighlightField("content", getHighlightFieldParameters())
+                                )),
+                                Object.class
+                        ))
+                        .withPageable(pageable);
+        System.out.println(searchQueryBuilder.getQuery());
+
+        return runContractQuery(searchQueryBuilder.build());
+    }
+
+    private Page<ContractIndexResultsDTO> runContractQuery(NativeQuery searchQuery) {
+        System.out.println(searchQuery.getQuery());
+        var searchHits = elasticsearchTemplate.search(searchQuery, ContractIndex.class,
+                IndexCoordinates.of("contract_index"));
+        System.out.println(searchHits.getSearchHits());
+        var searchHitsPaged = SearchHitSupport.searchPageFor(searchHits, searchQuery.getPageable());
+        System.out.println(searchHitsPaged);
+        return toContractIndexResultsDTO(searchHitsPaged, fileService);
+    }
+
+    private Query buildGovermentNameAndLevelQuery(List<String> tokens) {
+        System.out.println(tokens);
+        BoolQuery boolQuery = BoolQuery.of(b -> {
+            tokens.forEach(token -> {
+                b.should(m -> m.matchPhrase(mp -> mp.field("government_name").query(token)));
+                b.should(m -> m.matchPhrase(mp -> mp.field("administration_level").query(token)));
+                b.should(m -> m.matchPhrase(mp -> mp.field("content").query(token)));
+            });
+            return b;
+        });
+
+        return new Query.Builder().bool(boolQuery).build();
+    }
+
+    @Override
+    public Page<ContractIndexResultsDTO> contractSearchByGovernmentNameAndLevel(final List<String> keywords, final Pageable pageable) {
+        System.out.println(keywords);
+        var searchQueryBuilder =
+                new NativeQueryBuilder().withQuery(buildGovermentNameAndLevelQuery(keywords))
+                        .withHighlightQuery(new HighlightQuery(
+                                new Highlight(List.of(
+                                        new HighlightField("content", getHighlightFieldParameters())
+                                )),
+                                Object.class
+                        ))
+                        .withPageable(pageable);
+        System.out.println(searchQueryBuilder.getQuery());
+
+        return runContractQuery(searchQueryBuilder.build());
+    }
+
+    @Override
+    public Page<ContractIndexResultsDTO> contractSearchByContent(final List<String> keywords, final Pageable pageable) {
+        System.out.println(keywords);
+        var searchQueryBuilder =
+                new NativeQueryBuilder().withQuery(buildSimpleSearchQuery(keywords))
+                        .withHighlightQuery(new HighlightQuery(
+                                new Highlight(List.of(
+                                        new HighlightField("content", getHighlightFieldParameters())
+                                )),
+                                Object.class
+                        ))
+                        .withPageable(pageable);
+        System.out.println(searchQueryBuilder.getQuery());
+
+        return runContractQuery(searchQueryBuilder.build());
     }
 
 }

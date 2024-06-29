@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 export class FileService {
   apiHost: string = 'http://localhost:8080/api/index/';
   url = this.apiHost + 'law';
+  url1 = this.apiHost + 'contract';
   headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
 
@@ -18,10 +19,14 @@ export class FileService {
     files.forEach(file => {
       formData.append('files', file, file.name);
     });
-
-    //const headers = new HttpHeaders();
-    //headers.append('Content-Type', 'multipart/form-data');
-
     return this.http.post(this.url, formData);
+  }
+
+  uploadContracts(files: File[]): Observable<any> {
+    const formData: FormData = new FormData();
+    files.forEach(file => {
+      formData.append('files', file, file.name);
+    });
+    return this.http.post(this.url1, formData);
   }
 }
