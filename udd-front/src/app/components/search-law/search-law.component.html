@@ -9,3 +9,22 @@
         </ul>
       </div>
   </div>
+  <div class="search-container">
+    <h2>Search</h2>
+    <input type="text" [(ngModel)]="keywords" placeholder="Enter keywords separated by commas"
+      class="search-input"
+    />
+    <button (click)="onSearch()">Search</button>
+  
+    <div *ngIf="searchResult">
+      <h3>Search Results</h3>
+      <div *ngIf="searchResult.content.length === 0">No results found.</div>
+      <ul>
+        <li *ngFor="let result of searchResult.content">
+          <h4>{{ result.title }}</h4>
+          <p *ngFor="let highlight of result.highlight" [innerHTML]="highlight"></p>
+          <a [href]="result.downloadUrl" download>Download</a>
+        </li>
+      </ul>
+    </div>
+  </div>
