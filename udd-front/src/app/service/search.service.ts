@@ -80,6 +80,11 @@ export interface SearchQueryContractByGovernmentNameAnsLevelDTO {
   administrationLevel: string;
 }
 
+export interface SearchByGeolocationDTO {
+  city: string;
+  distanceInKm: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -89,6 +94,7 @@ export class SearchService {
   url1 = this.apiHost + 'contract/by-content';
   url2 = this.apiHost + 'contract/by-name-and-surname';
   url3 = this.apiHost + 'contract/by-government-name-and-level';
+  url4 = this.apiHost + 'contract/by-geolication';
   headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   constructor(private http: HttpClient) { }
@@ -119,5 +125,12 @@ export class SearchService {
       .set('page', page.toString())
       .set('size', size.toString());
     return this.http.post<SearchResultGovernment>(`${this.url3}`, query, { params });
+  }
+
+  searchContractByGeolocation(query: SearchByGeolocationDTO, page: number, size: number): Observable<SearchResultGovernment> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.post<SearchResultGovernment>(`${this.url4}`, query, { params });
   }
 }

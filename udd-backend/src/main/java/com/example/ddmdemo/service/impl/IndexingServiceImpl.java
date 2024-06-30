@@ -166,12 +166,6 @@ public class IndexingServiceImpl implements IndexingService {
                 contractIndex.setTitle(contract.getOriginalFilename());
                 System.out.println(contractIndex.getName());
                 contractIndexRepository.save(contractIndex);
-//            log.info(String.format("STATISTIC-LOG %s->%s %s->%s",
-//                    //geolocationResponse.results().get(0).city(),
-//                    contractIndexRequest.getName(),
-//                    contractIndexRequest.getSurname(),
-//                    contractIndexRequest.getGovernmentName()
-//            ));
             }
         });
     }

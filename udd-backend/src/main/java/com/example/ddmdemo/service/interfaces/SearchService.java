@@ -25,4 +25,6 @@ public interface SearchService {
     Page<ContractIndexResultsDTO> contractSearchByGovernmentNameAndLevel(final List<String> keywords, final Pageable pageable);
 
     Page<ContractIndexResultsDTO> contractSearchByContent(final List<String> keywords, final Pageable pageable);
+
+    Page<ContractIndexResultsDTO> searchContractByGeoDistance(final String city, final double distance, final Pageable pageable);
 }

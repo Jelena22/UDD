@@ -26,6 +26,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import { HttpClientModule } from '@angular/common/http';
 import { SearchLawComponent } from './components/search-law/search-law.component';
 import { SearchContractComponent } from './components/search-contract/search-contract.component';
+import { SearchContractGeolocationComponent } from './components/search-contract-geolocation/search-contract-geolocation.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { SearchContractComponent } from './components/search-contract/search-con
     LoginUserComponent,
     HeaderComponent,
     SearchLawComponent,
-    SearchContractComponent
+    SearchContractComponent,
+    SearchContractGeolocationComponent
   ],
   imports: [
     BrowserModule,
