@@ -4,6 +4,7 @@ import { RegisterUserComponent } from './components/register-user/register-user.
 import { LoginUserComponent } from './components/login-user/login-user.component';
 import { SearchLawComponent } from './components/search-law/search-law.component';
 import { SearchContractComponent } from './components/search-contract/search-contract.component';
+import { SearchContractGeolocationComponent } from './components/search-contract-geolocation/search-contract-geolocation.component';
 
 const routes: Routes = [
   {
@@ -15,12 +16,16 @@ const routes: Routes = [
     component: LoginUserComponent
   },
   {
-    path: 'searchLaws',
+    path: 'search-laws',
     component: SearchLawComponent
   },
   {
-    path: 'searchContracts',
+    path: 'search-contracts',
     component: SearchContractComponent
+  },
+  {
+    path: 'search-contract-geolocation',
+    component: SearchContractGeolocationComponent
   }
 ];
 

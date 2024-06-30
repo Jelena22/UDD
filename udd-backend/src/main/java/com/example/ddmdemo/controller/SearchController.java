@@ -60,4 +60,9 @@ public class SearchController {
     public Page<ContractIndexResultsDTO> searchContractByContent(@RequestBody SearchQueryDTO simpleSearchQuery, Pageable pageable) {
         return searchService.contractSearchByContent(simpleSearchQuery.keywords(), pageable);
     }
+
+    @PostMapping("/contract/by-geolication")
+    public Page<ContractIndexResultsDTO> searchContractByGeolocation(@RequestBody SearchByGeolocationDTO simpleSearchQuery, Pageable pageable) {
+        return searchService.searchContractByGeoDistance(simpleSearchQuery.getCity(), simpleSearchQuery.getDistanceInKm(), pageable);
+    }
 }
