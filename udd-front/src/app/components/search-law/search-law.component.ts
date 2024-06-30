@@ -14,6 +14,10 @@ export class SearchLawComponent implements OnInit{
   //searchQuery: string = '';
   keywords: string = '';
   searchResult: SearchResult | null = null;
+  totalPages: number = 0;
+  totalElements: number = 0;
+  currentPage: number = 0;
+  pageSize: number = 4;
 
   files: File[] = [];
 
@@ -70,16 +74,21 @@ export class SearchLawComponent implements OnInit{
       });
       return;
     }
-    this.searchResult = null;
+    const isFirstSearch = !this.searchResult;
     const query: SearchQueryDTO = { keywords: this.keywords.split(',').map(keyword => keyword.trim()) };
-    this.searchService.search(query).subscribe(
+    this.searchService.search(query, this.currentPage, this.pageSize).subscribe(
       result => {
         this.searchResult = result;
-        Swal.fire({
-          icon: 'success',
-          title: 'Search Complete!',
-          text: 'Results have been successfully retrieved.',
-        });
+        this.totalPages = result.totalPages;
+        console.log(this.totalPages);
+        this.totalElements = this.searchResult.totalElements;
+        if (isFirstSearch) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Search Complete!',
+            text: 'Results have been successfully retrieved.',
+          });
+        }
       },
       error => {
         Swal.fire({
@@ -90,6 +99,14 @@ export class SearchLawComponent implements OnInit{
         console.error('Search failed', error);
       }
     );
+  }
+
+  onPageChange(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      console.log(this.totalPages);
+      this.currentPage = page;
+      this.onSearch();
+    }
   }
 
 }

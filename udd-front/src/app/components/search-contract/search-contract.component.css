@@ -121,3 +121,40 @@
   .search-container li a:active {
     background-color: #4527a0;
   }
+
+  .form-group-container {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  .pagination {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+    justify-content: center;
+  }
+  
+  .page-item {
+    display: inline-block;
+    margin-right: 5px; /* Adjust spacing between items as needed */
+  }
+  
+  .page-link {
+    padding: 0.5rem 0.75rem;
+    color: #007bff;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+  }
+  
+  .page-link:hover {
+    text-decoration: none;
+    background-color: #f8f9fa;
+    cursor: pointer;
+  }
+  
+  .page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: not-allowed;
+  }

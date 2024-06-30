@@ -2,7 +2,6 @@ package com.example.ddmdemo.controller;
 
 import com.example.ddmdemo.dto.*;
 import com.example.ddmdemo.indexmodel.DummyIndex;
-import com.example.ddmdemo.indexmodel.LawIndex;
 import com.example.ddmdemo.service.interfaces.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,9 +35,7 @@ public class SearchController {
 
     @PostMapping("/law")
     public Page<LawIndexResultsDTO> simpleLawSearch(@RequestBody SearchQueryDTO simpleSearchQuery, Pageable pageable) {
-        System.out.println("Usao u law search controller");
         System.out.println(simpleSearchQuery);
-        System.out.println(pageable);
         return searchService.lawSearch(simpleSearchQuery.keywords(), pageable);
     }
 
@@ -51,7 +48,7 @@ public class SearchController {
     }
 
     @PostMapping("/contract/by-government-name-and-level")
-    public Page<ContractIndexResultsDTO> searchContractByGovernmentNameAndLevel(@RequestBody SearchQueryContractByGovernmentNameAnsLevel simpleSearchQuery, Pageable pageable) {
+    public Page<ContractIndexResultsDTO> searchContractByGovernmentNameAndLevel(@RequestBody SearchQueryContractByGovernmentNameAnsLevelDTO simpleSearchQuery, Pageable pageable) {
         System.out.println("Usao u law search controller");
         System.out.println(simpleSearchQuery);
         List<String> tokens = Arrays.asList(simpleSearchQuery.getGovernmentName(), simpleSearchQuery.getAdministrationLevel());
@@ -61,7 +58,6 @@ public class SearchController {
 
     @PostMapping("/contract/by-content")
     public Page<ContractIndexResultsDTO> searchContractByContent(@RequestBody SearchQueryDTO simpleSearchQuery, Pageable pageable) {
-
         return searchService.contractSearchByContent(simpleSearchQuery.keywords(), pageable);
     }
 }
