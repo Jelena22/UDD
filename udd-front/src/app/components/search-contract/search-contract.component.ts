@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FileService } from 'src/app/service/file.service';
-import { SearchQueryDTO, SearchResult, SearchService } from 'src/app/service/search.service';
+import { ContractSearchResult, SearchQueryContractByGovernmentNameAnsLevelDTO, SearchQueryContractByNameAndSurnameDTO, SearchQueryDTO, SearchResult, SearchResult1, SearchResultGovernment, SearchService } from 'src/app/service/search.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -14,9 +15,21 @@ export class SearchContractComponent implements OnInit {
   files: File[] = [];
   keywords: string = '';
   searchResult: SearchResult | null = null;
+  searchResult1: SearchResult1 | null = null;
+  searchResultGovernment: SearchResultGovernment | null = null;
+  totalPages: number = 0;
+  totalElements: number = 0;
+  currentPage: number = 0;
+  pageSize: number = 4;
+  name: string = '';
+  surname: string = '';
+  governmentName: string = '';
+  administrationLevel: string = '';
 
   constructor( private router: Router,
-    private fileService: FileService, private searchService: SearchService) {}
+    private fileService: FileService, private searchService: SearchService) {
+
+    }
 
   ngOnInit(): void {
 
@@ -59,7 +72,7 @@ export class SearchContractComponent implements OnInit {
   }
 
   onSearch(): void {
-    if (this.keywords.trim() === '') {
+    if (this.keywords === '') {
       Swal.fire({
         icon: 'warning',
         title: 'Warning',
@@ -67,16 +80,22 @@ export class SearchContractComponent implements OnInit {
       });
       return;
     }
-    this.searchResult = null;
+    //this.searchResult = null;
+    const isFirstSearch = !this.searchResult
     const query: SearchQueryDTO = { keywords: this.keywords.split(',').map(keyword => keyword.trim()) };
-    this.searchService.searchContractByContent(query).subscribe(
+    this.searchService.searchContractByContent(query, this.currentPage, this.pageSize).subscribe(
       result => {
         this.searchResult = result;
-        Swal.fire({
-          icon: 'success',
-          title: 'Search Complete!',
-          text: 'Results have been successfully retrieved.',
-        });
+        this.totalPages = result.totalPages;
+        console.log(this.totalPages);
+        this.totalElements = this.searchResult.totalElements;
+        if (isFirstSearch) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Search Complete!',
+            text: 'Results have been successfully retrieved.',
+          });
+        }
       },
       error => {
         Swal.fire({
@@ -87,6 +106,110 @@ export class SearchContractComponent implements OnInit {
         console.error('Search failed', error);
       }
     );
+  }
+
+  onSearchByNameSurname(): void {
+    if (this.name === '' && this.surname === '') {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Warning',
+        text: 'Please enter keywords to search.',
+      });
+      return;
+    }
+    const query: SearchQueryContractByNameAndSurnameDTO = {
+      name: this.name,
+      surname: this.surname
+    };
+    const isFirstSearch = !this.searchResult1;
+    this.searchService.searchContractByNameSurname(query, this.currentPage, this.pageSize).subscribe(
+      result => {
+        this.searchResult1 = result;
+        console.log(result);
+        this.totalPages = result.totalPages;
+        console.log(this.totalPages);
+        this.totalElements = this.searchResult1.totalElements;
+        if (isFirstSearch) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Search Complete!',
+            text: 'Results have been successfully retrieved.',
+          });
+        }
+      },
+      error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Search Failed',
+          text: 'There was an error processing your search.',
+        });
+        console.error('Search failed', error);
+      }
+    );
+  }
+
+  onSearchByNameLevel(): void {
+    if (this.governmentName === '' && this.administrationLevel === '') {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Warning',
+        text: 'Please enter keywords to search.',
+      });
+      return;
+    }
+    const query: SearchQueryContractByGovernmentNameAnsLevelDTO = {
+      governmentName: this.governmentName,
+      administrationLevel: this.administrationLevel
+    };
+    const isFirstSearch = !this.searchResultGovernment;
+    this.searchService.searchContractByNameLevel(query, this.currentPage, this.pageSize).subscribe(
+      result => {
+        this.searchResultGovernment = result;
+        console.log(result);
+        this.totalPages = result.totalPages;
+        console.log(this.totalPages);
+        this.totalElements = this.searchResultGovernment.totalElements;
+        if (isFirstSearch) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Search Complete!',
+            text: 'Results have been successfully retrieved.',
+          });
+        }
+      },
+      error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Search Failed',
+          text: 'There was an error processing your search.',
+        });
+        console.error('Search failed', error);
+      }
+    );
+  }
+
+  onPageChange(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      console.log(this.totalPages);
+      this.currentPage = page;
+      this.onSearchByNameLevel();
+    }
+  }
+
+  onPageChange1(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      console.log(this.totalPages);
+      this.currentPage = page;
+      this.onSearchByNameSurname();
+    }
+  }
+
+  onPageChange2(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      console.log(this.totalPages);
+      this.currentPage = page;
+      this.onSearch();
+    }
   }
 
 }

@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchQueryContractByGovernmentNameAnsLevel {
+public class SearchQueryContractByGovernmentNameAnsLevelDTO {
     private String governmentName;
     private String administrationLevel;
 }
