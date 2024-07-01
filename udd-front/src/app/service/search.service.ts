@@ -5,8 +5,6 @@ import { Observable } from 'rxjs';
 
 export interface SearchQueryDTO {
   keywords: string[];
-  
-  
 }
 
 export interface LawIndexResultsDTO {
@@ -95,6 +93,8 @@ export class SearchService {
   url2 = this.apiHost + 'contract/by-name-and-surname';
   url3 = this.apiHost + 'contract/by-government-name-and-level';
   url4 = this.apiHost + 'contract/by-geolication';
+  url5 = this.apiHost + 'contract/advanced';
+  url6 = this.apiHost + 'law/advanced';
   headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   constructor(private http: HttpClient) { }
@@ -132,5 +132,19 @@ export class SearchService {
       .set('page', page.toString())
       .set('size', size.toString());
     return this.http.post<SearchResultGovernment>(`${this.url4}`, query, { params });
+  }
+
+  searchContractAdvanced(query: SearchQueryDTO, page: number, size: number): Observable<SearchResult1> {
+    const params = new HttpParams()
+    .set('page', page.toString())
+    .set('size', size.toString());
+    return this.http.post<SearchResult1>(`${this.url5}`, query, { params });
+  }
+
+  searchLawAdvanced(query: SearchQueryDTO, page: number, size: number): Observable<SearchResult> {
+    const params = new HttpParams()
+    .set('page', page.toString())
+    .set('size', size.toString());
+    return this.http.post<SearchResult>(`${this.url6}`, query, { params });
   }
 }

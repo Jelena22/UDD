@@ -1,7 +1,9 @@
 package com.example.ddmdemo.controller;
 
 import com.example.ddmdemo.dto.*;
+import com.example.ddmdemo.indexmodel.ContractIndex;
 import com.example.ddmdemo.indexmodel.DummyIndex;
+import com.example.ddmdemo.indexmodel.LawIndex;
 import com.example.ddmdemo.service.interfaces.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,16 +23,15 @@ public class SearchController {
 
     private final SearchService searchService;
 
-    @PostMapping("/simple")
-    public Page<DummyIndex> simpleSearch(@RequestBody SearchQueryDTO simpleSearchQuery,
-                                         Pageable pageable) {
-        return searchService.simpleSearch(simpleSearchQuery.keywords(), pageable);
+    @PostMapping("/contract/advanced")
+    public Page<ContractIndexResultsDTO> advancedContractSearch(@RequestBody SearchQueryDTO advancedSearchQuery, Pageable pageable) {
+        return searchService.advancedContractSearch(advancedSearchQuery.keywords(), pageable);
     }
 
-    @PostMapping("/advanced")
-    public Page<DummyIndex> advancedSearch(@RequestBody SearchQueryDTO advancedSearchQuery,
-                                           Pageable pageable) {
-        return searchService.advancedSearch(advancedSearchQuery.keywords(), pageable);
+    @PostMapping("/law/advanced")
+    public Page<LawIndexResultsDTO> advancedLawSearch(@RequestBody SearchQueryDTO advancedSearchQuery, Pageable pageable) {
+        System.out.println("Usao u contoler advanced");
+        return searchService.advancedLawSearch(advancedSearchQuery.keywords(), pageable);
     }
 
     @PostMapping("/law")

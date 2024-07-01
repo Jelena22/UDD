@@ -1,31 +1,27 @@
 package com.example.ddmdemo.service.impl;
 
-import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
+//import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
-//import com.example.ddmdemo.dto.LawIndexResultsDTO;
 import com.example.ddmdemo.dto.*;
 import com.example.ddmdemo.exceptionhandling.exception.MalformedQueryException;
 import com.example.ddmdemo.indexmodel.ContractIndex;
-import com.example.ddmdemo.indexmodel.DummyIndex;
-//import com.example.ddmdemo.indexmodel.LawIndex;
 import com.example.ddmdemo.indexmodel.LawIndex;
 import com.example.ddmdemo.infrastructure.LocationClient;
 import com.example.ddmdemo.service.interfaces.FileService;
 import com.example.ddmdemo.service.interfaces.SearchService;
 import java.util.List;
+
+import com.example.ddmdemo.util.AdvancedSearchQueryBuilder;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.common.unit.Fuzziness;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+//import org.elasticsearch.index.query.QueryBuilders;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
-import org.springframework.data.elasticsearch.client.erhlc.NativeSearchQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHitSupport;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
@@ -38,8 +34,6 @@ import org.springframework.stereotype.Service;
 import static com.example.ddmdemo.dto.ContractIndexResultsDTO.toContractIndexResultsDTO;
 import static com.example.ddmdemo.dto.LawIndexResultsDTO.toLawIndexResultsDTO;
 
-//import static com.example.ddmdemo.dto.LawIndexResultsDTO.toLawIndexResultsDTO;
-
 @Service
 @RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
@@ -51,27 +45,43 @@ public class SearchServiceImpl implements SearchService {
     private String apiKey;
 
     @Override
-    public Page<DummyIndex> simpleSearch(List<String> keywords, Pageable pageable) {
-        var searchQueryBuilder =
-            new NativeQueryBuilder().withQuery(buildSimpleSearchQuery(keywords))
-                .withPageable(pageable);
-
-        return runQuery(searchQueryBuilder.build());
-    }
-
-    @Override
-    public Page<DummyIndex> advancedSearch(List<String> expression, Pageable pageable) {
-        if (expression.size() != 3) {
+    public Page<ContractIndexResultsDTO> advancedContractSearch(List<String> expressions, Pageable pageable) {
+        System.out.println(expressions.size());
+        if (expressions.size() < 3 || expressions.size() % 2 == 0) {
             throw new MalformedQueryException("Search query malformed.");
         }
 
-        String operation = expression.get(1);
-        expression.remove(1);
         var searchQueryBuilder =
-            new NativeQueryBuilder().withQuery(buildAdvancedSearchQuery(expression, operation))
+            new NativeQueryBuilder().withQuery(new AdvancedSearchQueryBuilder().buildAdvancedSearchQuery(expressions))
+                    .withHighlightQuery(new HighlightQuery(
+                            new Highlight(List.of(
+                                    new HighlightField("content", getHighlightFieldParameters())
+                            )),
+                            Object.class
+                    ))
                 .withPageable(pageable);
+        System.out.println(searchQueryBuilder.getQuery());
 
-        return runQuery(searchQueryBuilder.build());
+        return runContractQuery(searchQueryBuilder.build());
+    }
+
+    @Override
+    public Page<LawIndexResultsDTO> advancedLawSearch(List<String> expressions, Pageable pageable) {
+        System.out.println(expressions.size());
+        if (expressions.size() < 3 || expressions.size() % 2 == 0) {
+            throw new MalformedQueryException("Search query malformed.");
+        }
+        var searchQueryBuilder =
+                new NativeQueryBuilder().withQuery(new AdvancedSearchQueryBuilder().buildAdvancedSearchQuery(expressions))
+                        .withHighlightQuery(new HighlightQuery(
+                                new Highlight(List.of(
+                                        new HighlightField("content", getHighlightFieldParameters())
+                                )),
+                                Object.class
+                        ))
+                        .withPageable(pageable);
+        System.out.println(searchQueryBuilder.getQuery());
+       return runLawQuery(searchQueryBuilder.build());
     }
 
     private Query buildSimpleSearchQuery(List<String> tokens) {
@@ -116,21 +126,8 @@ public class SearchServiceImpl implements SearchService {
             return b;
         })))._toQuery();
     }
-
-    private Page<DummyIndex> runQuery(NativeQuery searchQuery) {
-
-        var searchHits = elasticsearchTemplate.search(searchQuery, DummyIndex.class,
-            IndexCoordinates.of("dummy_index"));
-
-        var searchHitsPaged = SearchHitSupport.searchPageFor(searchHits, searchQuery.getPageable());
-
-        return (Page<DummyIndex>) SearchHitSupport.unwrapSearchHits(searchHitsPaged);
-    }
-
     @Override
     public Page<LawIndexResultsDTO> lawSearch(final List<String> keywords, final Pageable pageable) {
-        System.out.println("Usao u law search service");
-        System.out.println(keywords);
         var searchQueryBuilder =
                 new NativeQueryBuilder().withQuery(buildSimpleSearchQuery(keywords))
                         .withHighlightQuery(new HighlightQuery(
@@ -154,7 +151,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private Page<LawIndexResultsDTO> runLawQuery(NativeQuery searchQuery) {
-        System.out.println(searchQuery.getQuery());
+        System.out.println(searchQuery);
         var searchHits = elasticsearchTemplate.search(searchQuery, LawIndex.class,
                 IndexCoordinates.of("law_index"));
         System.out.println(searchHits.getSearchHits());
@@ -176,32 +173,6 @@ public class SearchServiceImpl implements SearchService {
         });
 
         return new Query.Builder().bool(boolQuery).build();
-//        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-//
-//        if (tokens.size() > 0) {
-//            boolQuery.should(QueryBuilders.matchPhraseQuery("name", tokens.get(0)));
-//        }
-//        if (tokens.size() > 1) {
-//            boolQuery.should(QueryBuilders.matchPhraseQuery("surname", tokens.get(1)));
-//        } else if (tokens.size() == 1) {
-//            boolQuery.should(QueryBuilders.matchPhraseQuery("surname", tokens.get(0)));
-//        }
-
-//        return BoolQuery.of(q -> q.should(s -> {
-//            if (tokens.size() > 0) {
-//                // Match phrase query for name and surname
-//                if (tokens.size() > 0) {
-//                    s.matchPhrase(m -> m.field("name").query(tokens.get(0)));
-//                }
-//                if (tokens.size() > 1) {
-//                    s.matchPhrase(m -> m.field("surname").query(tokens.get(1)));
-//                }
-//                if(tokens.size() == 1){
-//                    s.matchPhrase(m -> m.field("surname").query(tokens.get(0)));
-//                }
-//            }
-//            return s;
-//        }))._toQuery();
     }
 
     @Override
