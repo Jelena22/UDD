@@ -4,6 +4,7 @@ package com.example.ddmdemo.service.interfaces;
 import com.example.ddmdemo.dto.ContractIndexResultsDTO;
 import com.example.ddmdemo.dto.LawIndexResultsDTO;
 import com.example.ddmdemo.dto.SearchQueryContractByNameAndSurnameDTO;
+import com.example.ddmdemo.indexmodel.ContractIndex;
 import com.example.ddmdemo.indexmodel.DummyIndex;
 import java.util.List;
 
@@ -14,10 +15,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface SearchService {
+    Page<ContractIndexResultsDTO> advancedContractSearch(List<String> expression, Pageable pageable);
 
-    Page<DummyIndex> simpleSearch(List<String> keywords, Pageable pageable);
-
-    Page<DummyIndex> advancedSearch(List<String> expression, Pageable pageable);
+    Page<LawIndexResultsDTO> advancedLawSearch(List<String> expression, Pageable pageable);
 
     Page<LawIndexResultsDTO> lawSearch(final List<String> keywords, final Pageable pageable);
 
