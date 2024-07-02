@@ -17,6 +17,29 @@
     z-index: 1000; /* Opciono: Podesi z-index da bude iznad ostalog sadržaja */
 }
 
+.button3 {
+  position: fixed; /* Postavlja element fiksno na ekranu */
+  top: 15px;
+}
+
+.button4 {
+  position: fixed; /* Postavlja element fiksno na ekranu */
+  top: 15px;
+  margin-left: 105px;
+}
+
+.button5 {
+  position: fixed; /* Postavlja element fiksno na ekranu */
+  top: 15px;
+  margin-left: 245px;
+}
+
+.button6 {
+  position: fixed; /* Postavlja element fiksno na ekranu */
+  top: 15px;
+  margin-left: 345px;
+}
+
 .button1 {
   position: fixed; /* Postavlja element fiksno na ekranu */
   top: 15px; /* Pomeranje od vrha stranice */

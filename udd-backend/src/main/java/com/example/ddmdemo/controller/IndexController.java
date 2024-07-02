@@ -26,7 +26,6 @@ public class IndexController {
 
     @PostMapping("/contract")
     @ResponseStatus(HttpStatus.CREATED)
-    // @PreAuthorize("hasAuthority('INDEX_DATA')")
     public void indexContract(@RequestParam("files") List<MultipartFile> files) {
         System.out.println("Usao u index contract kontroler");
         indexingService.indexContract(files);

@@ -1,4 +1,4 @@
-<div class="search-container">
+<!--<div class="search-container">
     <h2>Search Contract</h2>
     <input type="text" [(ngModel)]="keywords" placeholder="Enter keywords"
       class="search-input"
@@ -29,8 +29,54 @@
         </ul>
       </nav>
     </div>
-</div>
+</div>-->
+<!-- app.component.html -->
 <div class="search-container">
+  <h2>Search Contract</h2>
+  <h4>search by: name, surname, content, administration_level, government_name</h4>
+  <div class="query-builder">
+    <div *ngFor="let query of queries; let i = index" class="query-row">
+      <input [(ngModel)]="query.field" placeholder="Field" class="query-input" />
+      <input [(ngModel)]="query.value" placeholder="Value" class="query-input" />
+      <select [(ngModel)]="query.logicalOperator" *ngIf="i < queries.length - 1" class="logical-operator">
+        <option value="AND">AND</option>
+        <option value="OR">OR</option>
+        <option value="NOT">NOT</option>
+      </select>
+      <button (click)="removeQuery(i)" *ngIf="queries.length > 1" class="remove-button">Remove</button>
+    </div>
+    <div class="button-container">
+      <button class="add-condition-button" (click)="addQuery()">Add Condition</button>
+      <button class="submit-button" (click)="onSearch()">Search</button>
+    </div>
+  </div>
+  <div *ngIf="searchResult">
+    <h3>Search Results</h3>
+    <div *ngIf="searchResult.content.length === 0">No results found.</div>
+    <ul>
+      <li *ngFor="let result of searchResult.content">
+        <h4>{{ result.title }}</h4>
+        <p *ngFor="let highlight of result.highlight" [innerHTML]="highlight"></p>
+        <a [href]="result.downloadUrl" download>Download</a>
+      </li>
+    </ul>
+    <nav *ngIf="totalPages > 1">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="currentPage === 0">
+          <a class="page-link" (click)="onPageChange(currentPage - 1)">Previous</a>
+        </li>
+        <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" [class.active]="i === currentPage">
+          <a class="page-link" (click)="onPageChange(i)">{{ i + 1 }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+          <a class="page-link" (click)="onPageChange(currentPage + 1)">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<!--<div class="search-container">
     <h2>Search Law</h2>
     <input type="text" [(ngModel)]="keywordsLaw" placeholder="Enter keywords"
       class="search-input"
@@ -61,4 +107,48 @@
         </ul>
       </nav>
     </div>
+</div>-->
+<div class="search-container">
+  <h2>Search Laws</h2>
+  <h4>search by: content</h4>
+  <div class="query-builder">
+    <div *ngFor="let query of queries1; let i = index" class="query-row">
+      <input [(ngModel)]="query.keyword" placeholder="Value" />
+      <select [(ngModel)]="query.logicalOperator" *ngIf="i < queries1.length - 1" class="logical-operator">
+        <option value="AND">AND</option>
+        <option value="OR">OR</option>
+        <option value="NOT">NOT</option>
+      </select>
+      <button (click)="removeQuery1(i)" *ngIf="queries1.length > 1">Remove</button>
+    </div>
+    <div class="button-container">
+      <button class="add-condition-button" (click)="addQuery1()">Add Condition</button>
+      <button class="submit-button" (click)="onSearchLaw()">Search</button>
+    </div>
+  </div>
+  <div *ngIf="searchResult1">
+    <h3>Search Results</h3>
+    <div *ngIf="searchResult1.content.length === 0">No results found.</div>
+    <ul>
+      <li *ngFor="let result of searchResult1.content">
+        <h4>{{ result.title }}</h4>
+        <p *ngFor="let highlight of result.highlight" [innerHTML]="highlight"></p>
+        <a [href]="result.downloadUrl" download>Download</a>
+      </li>
+    </ul>
+    <nav *ngIf="totalPages > 1">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="currentPage === 0">
+          <a class="page-link" (click)="onPageChange1(currentPage - 1)">Previous</a>
+        </li>
+        <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" [class.active]="i === currentPage">
+          <a class="page-link" (click)="onPageChange1(i)">{{ i + 1 }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+          <a class="page-link" (click)="onPageChange1(currentPage + 1)">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>
+
