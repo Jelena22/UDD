@@ -1,0 +1,48 @@
+.home-img{
+    width: 620px;
+    height: 530px;
+    margin-left: 450px;
+    position: static;
+    margin-top: 10px;
+  }
+
+  .search-container h1 {
+    color: #a274fd;
+    margin-top: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 7vh; /* Visina može biti podešena prema potrebi */
+    font-size: 3rem; /* Prilagodite veličinu fonta */
+    font-weight: bold; /* Dodajte debljinu fonta */
+    text-align: center; /* Centralizujte tekst */
+    background-color: #f0f0f0; /* Dodajte pozadinsku boju */
+  }
+
+  @keyframes skewAnimation {
+    0% {
+      transform: skew(0deg);
+    }
+    100% {
+      transform: skew(-25deg);
+    }
+  }
+
+  .italic-text {
+    font-size: 5rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    transform: skew(-15deg);
+    text-shadow: 4px 2px 4px rgba(80, 17, 153, 0.8); /* Dodajte senku */
+    animation: skewAnimation 0.3s ease forwards; /* Dodajte animaciju */
+  }
+  
+  .italic-text:hover {
+    transform: skew(-35deg);
+    transition: transform 0.3s ease;
+  }
+  
+  .italic-text:hover {
+    transform: skew(-25deg); /* Povećajte iskošenje na hover */
+  }

@@ -6,6 +6,7 @@ import { SearchLawComponent } from './components/search-law/search-law.component
 import { SearchContractComponent } from './components/search-contract/search-contract.component';
 import { SearchContractGeolocationComponent } from './components/search-contract-geolocation/search-contract-geolocation.component';
 import { SearchContractAdvancedComponent } from './components/search-contract-advanced/search-contract-advanced.component';
+import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
   {
@@ -31,7 +32,12 @@ const routes: Routes = [
   {
     path: 'search-contract-advanced',
     component: SearchContractAdvancedComponent
+  },
+  {
+    path: '',
+    component: HomeComponent
   }
+  
 ];
 
 @NgModule({

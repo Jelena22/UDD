@@ -29,3 +29,18 @@
   cursor: pointer; /* Kursor pri hoveru */
   z-index: 1000; /* Opciono: Podesi z-index da bude iznad ostalog sadržaja */
 }
+
+.dashboard-container {
+  margin-top: 0px; /* Prostor između toolbar-a i iframe-a */
+}
+
+iframe {
+  width: 100%;
+  height: 600px;
+  border: none; /* Uklanja okvir iframe-a */
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+  size: 9;
+}
