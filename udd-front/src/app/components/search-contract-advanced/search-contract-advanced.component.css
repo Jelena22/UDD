@@ -5,6 +5,10 @@
   .search-container h2 {
     color: #5e35b1;
   }
+
+  .search-container h4 {
+    color: #9461fa;
+  }
   
   .search-container input {
     padding: 12px;
@@ -13,7 +17,7 @@
     border-radius: 5px;
     display: inline-block;
   }
-  
+
   .search-container button {
     padding: 12px 20px;
     background-color: #7e57c2;
@@ -101,4 +105,65 @@
     color: #6c757d;
     pointer-events: none;
     cursor: not-allowed;
+  }
+
+  .query-builder {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .query-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .query-input {
+    margin-right: 5px;
+    font-size: 14px;
+    padding: 12px;
+    width: 315px;
+    margin-right: 10px;
+    border-radius: 5px;
+    display: inline-block;
+  }
+  
+  .logical-operator {
+    margin: 0 5px;
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+
+  .add-condition-button:hover, .submit-button:hover, .remove-button:hover {
+    opacity: 0.8;
+  }
+  
+  .add-condition-button:focus, .submit-button:focus, .remove-button:focus {
+    outline: none;
+  }
+
+  .button-container {
+    margin-top: 10px;
+  }
+  
+  .add-condition-button,
+  .submit-button {
+    padding: 10px 20px;
+    margin-right: 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .logical-operator {
+    padding: 8px;
+    border: 1px solid #880397;
+    border-radius: 4px;
+    color: #b418fc;
+  }
+  
+  .logical-operator option {
+    background-color: #d8acee; /* Boja pozadine opcija */
   }

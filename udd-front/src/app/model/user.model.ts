@@ -11,3 +11,16 @@ export class User {
 export class AuthRequest {
     constructor(public email: string = '', public password: string = '') {}
   }
+
+  export interface Query {
+    //keyword: any;
+    field: string;
+    operator: string;
+    value: string;
+    logicalOperator: string;
+  }
+
+  export interface QueryLaw {
+    keyword: string;
+    logicalOperator?: string;
+  }
