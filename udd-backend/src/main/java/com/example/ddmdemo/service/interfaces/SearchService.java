@@ -3,12 +3,9 @@ package com.example.ddmdemo.service.interfaces;
 //import com.example.ddmdemo.dto.LawIndexResultsDTO;
 import com.example.ddmdemo.dto.ContractIndexResultsDTO;
 import com.example.ddmdemo.dto.LawIndexResultsDTO;
-import com.example.ddmdemo.dto.SearchQueryContractByNameAndSurnameDTO;
-import com.example.ddmdemo.indexmodel.ContractIndex;
-import com.example.ddmdemo.indexmodel.DummyIndex;
+
 import java.util.List;
 
-import com.example.ddmdemo.indexmodel.LawIndex;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

@@ -31,16 +31,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import static com.example.ddmdemo.constant.Constants.CONTRACT_GOVERNMENT_REGEX;
-import static com.example.ddmdemo.constant.Constants.NAME_AND_SURNAME_REGEX;
+//import static com.example.ddmdemo.constant.Constants.CONTRACT_GOVERNMENT_REGEX;
+//import static com.example.ddmdemo.constant.Constants.NAME_AND_SURNAME_REGEX;
 
 @Service
 @RequiredArgsConstructor
 public class IndexingServiceImpl implements IndexingService {
-
-//       private final DummyIndexRepository dummyIndexRepository;
-//
-//    private final DummyRepository dummyRepository;
 
     private final FileService fileService;
 
@@ -58,6 +54,9 @@ public class IndexingServiceImpl implements IndexingService {
 
     @Value("${geolocation.api.key}")
     private String apiKey;
+
+    private final String CONTRACT_GOVERNMENT_REGEX = "Uprava za (.*?), nivo uprave: (.*?), (.*?), (.*?), (.*?) u daljem tekstu klijent.";
+    private final String NAME_AND_SURNAME_REGEX = "Ukupna cena:.*?\\n(\\S+\\s*\\S+\\s*\\S+).*";
 
 
     @Override
@@ -116,6 +115,7 @@ public class IndexingServiceImpl implements IndexingService {
     }
 
     @Override
+    @Transactional
     public void indexLaws(final List<MultipartFile> files) {
         System.out.println("Usao u index law service");
         files.forEach(file -> {

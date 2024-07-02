@@ -1,9 +1,6 @@
 package com.example.ddmdemo.controller;
 
 import com.example.ddmdemo.dto.*;
-import com.example.ddmdemo.indexmodel.ContractIndex;
-import com.example.ddmdemo.indexmodel.DummyIndex;
-import com.example.ddmdemo.indexmodel.LawIndex;
 import com.example.ddmdemo.service.interfaces.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

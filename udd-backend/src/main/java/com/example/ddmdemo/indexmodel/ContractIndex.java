@@ -10,7 +10,7 @@ import org.springframework.data.elasticsearch.annotations.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(indexName = "contract_index")
+@Document(indexName = "new_contract_index")
 @Setting(settingPath = "/configuration/serbian-analyzer-config.json")
 public class ContractIndex {
 
@@ -47,13 +47,4 @@ public class ContractIndex {
 
     @Field(type = FieldType.Integer, store = true, name = "database_id", index = false)
     private Integer databaseId;
-
-//    public ContractIndex(final ContractIndexRequest contractIndexRequest) {
-//        this.name = contractIndexRequest.getName();
-//        this.surname = contractIndexRequest.getSurname();
-//        this.governmentName = contractIndexRequest.getGovernmentName();
-//        this.administrationLevel = contractIndexRequest.getAdministrationLevel();
-//        this.address = contractIndexRequest.getAddress();
-//        this.title = contractIndexRequest.getContractFile().getName();
-//    }
 }
