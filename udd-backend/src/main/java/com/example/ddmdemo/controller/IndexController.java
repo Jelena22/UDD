@@ -18,16 +18,13 @@ public class IndexController {
 
     @PostMapping("/law")
     @ResponseStatus(HttpStatus.CREATED)
-   // @PreAuthorize("hasAuthority('INDEX_DATA')")
     public void index(@RequestParam("files") List<MultipartFile> files) {
-        System.out.println("Usao u index law kontroler");
         indexingService.indexLaws(files);
     }
 
     @PostMapping("/contract")
     @ResponseStatus(HttpStatus.CREATED)
     public void indexContract(@RequestParam("files") List<MultipartFile> files) {
-        System.out.println("Usao u index contract kontroler");
         indexingService.indexContract(files);
     }
 }

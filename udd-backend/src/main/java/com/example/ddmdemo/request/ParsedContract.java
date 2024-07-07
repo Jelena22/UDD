@@ -15,5 +15,4 @@ public class ParsedContract {
     private String address;
     private String administrationLevel;
     private String content;
-    //private MultipartFile contractFile;
 }
