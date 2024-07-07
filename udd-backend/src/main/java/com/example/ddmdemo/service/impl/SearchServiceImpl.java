@@ -88,10 +88,7 @@ public class SearchServiceImpl implements SearchService {
         System.out.println(tokens);
         return BoolQuery.of(q -> q.must(mb -> mb.bool(b -> {
             tokens.forEach(token -> {
-                //b.should(sb -> sb.match(
-                  //  m -> m.field("title").fuzziness(Fuzziness.ONE.asString()).query(token)));
                 b.should(sb -> sb.matchPhrase(m -> m.field("content").query(token)));
-                //b.should(sb -> sb.match(m -> m.field("content_en").query(token)));
             });
             System.out.println(b);
             return b;

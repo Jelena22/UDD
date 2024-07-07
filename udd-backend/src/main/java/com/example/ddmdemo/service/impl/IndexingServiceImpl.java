@@ -58,39 +58,6 @@ public class IndexingServiceImpl implements IndexingService {
     private final String CONTRACT_GOVERNMENT_REGEX = "Uprava za (.*?), nivo uprave: (.*?), (.*?), (.*?), (.*?) u daljem tekstu klijent.";
     private final String NAME_AND_SURNAME_REGEX = "Ukupna cena:.*?\\n(\\S+\\s*\\S+\\s*\\S+).*";
 
-
-    @Override
-    @Transactional
-    public String indexDocument(MultipartFile documentFile) {
-//        var newEntity = new DummyTable();
-//        var newIndex = new DummyIndex();
-//
-//        var title = Objects.requireNonNull(documentFile.getOriginalFilename()).split("\\.")[0];
-//        newIndex.setTitle(title);
-//        newEntity.setTitle(title);
-//
-//        var documentContent = extractDocumentContent(documentFile);
-//        if (detectLanguage(documentContent).equals("SR")) {
-//            newIndex.setContentSr(documentContent);
-//        } else {
-//            newIndex.setContentEn(documentContent);
-//        }
-//        newEntity.setTitle(title);
-//
-//        var serverFilename = fileService.store(documentFile, UUID.randomUUID().toString());
-//        newIndex.setServerFilename(serverFilename);
-//        newEntity.setServerFilename(serverFilename);
-//
-//        newEntity.setMimeType(detectMimeType(documentFile));
-//        var savedEntity = dummyRepository.save(newEntity);
-//
-//        newIndex.setDatabaseId(savedEntity.getId());
-//        dummyIndexRepository.save(newIndex);
-//
-//        return serverFilename;
-        return "kk";
-    }
-
     private String extractDocumentContent(MultipartFile multipartPdfFile) {
         String documentContent;
         try (var pdfFile = multipartPdfFile.getInputStream()) {
@@ -105,19 +72,9 @@ public class IndexingServiceImpl implements IndexingService {
         return documentContent;
     }
 
-    private String detectLanguage(String text) {
-        var detectedLanguage = languageDetector.detect(text).getLanguage().toUpperCase();
-        if (detectedLanguage.equals("HR")) {
-            detectedLanguage = "SR";
-        }
-
-        return detectedLanguage;
-    }
-
     @Override
     @Transactional
     public void indexLaws(final List<MultipartFile> files) {
-        System.out.println("Usao u index law service");
         files.forEach(file -> {
             LawIndex lawIndex = new LawIndex();
 
